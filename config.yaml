@@ -1,0 +1,18 @@
+credentials:
+  usernames:
+    drfatima:
+      name: Dr. Fatima Zahra
+      password: doctor123
+      role: doctor
+    reception1:
+      name: Reception Staff
+      password: recep123
+      role: reception
+    director:
+      name: Hospital Director
+      password: director123
+      role: management
+    aioperator:
+      name: AI Operator
+      password: ai123
+      role: ai
