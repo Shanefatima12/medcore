@@ -1,7 +1,6 @@
 """
-MedCore — Hospital Intelligence Platform v2.0
-Enhanced with real hospital data & charts
-HOD Pitch Ready | Deploy Ready
+MedCore — Hospital Intelligence Platform
+Hospital Intelligence | SSUET BME | Karachi
 Run: streamlit run medcore_app.py
 """
 
@@ -57,7 +56,7 @@ def show_login():
             Hospital Intelligence Platform</div>
           <div style='font-size:0.65rem;color:#1a3058;margin-top:0.3rem;
                       font-family:"IBM Plex Mono",monospace;'>
-            v2.0 · SSUET BME · Karachi</div>
+            SSUET BME · Karachi</div>
         </div>""", unsafe_allow_html=True)
         st.markdown("""
         <div style='background:#0b1425;border:1px solid #112240;border-radius:16px;
@@ -94,7 +93,7 @@ def show_login():
         </div>
         <div style='text-align:center;margin-top:1rem;font-family:"IBM Plex Mono",
                     monospace;font-size:0.6rem;color:#1a3058;'>
-          MedCore v2.0 · SSUET BME · 2026</div>
+          MedCore · SSUET BME · 2026</div>
         """, unsafe_allow_html=True)
 
 if "logged_in" not in st.session_state:
@@ -164,14 +163,6 @@ PATIENTS = [
     {"id":"PKR-0901","name":"Zara Malik","age":29,"gender":"F","dept":"General OPD","status":"Waiting","wait":8,"bp":"115/72","hr":70,"spo2":99,"dx":"Migraine","risk":"Low"},
     {"id":"PKR-1023","name":"Hassan Rauf","age":66,"gender":"M","dept":"ICU","status":"Critical","wait":0,"bp":"190/110","hr":110,"spo2":91,"dx":"Acute MI","risk":"High"},
 ]
-DR_SCANS = [
-    {"pid":"PKR-0312","name":"Bilal Khan","time":"14:22","grade":"Severe","confidence":"94%","flag":"🔴"},
-    {"pid":"PKR-0847","name":"Ayesha Noor","time":"13:55","grade":"Mild","confidence":"89%","flag":"🟡"},
-    {"pid":"PKR-0561","name":"Sana Raza","time":"13:10","grade":"No DR","confidence":"97%","flag":"🟢"},
-    {"pid":"PKR-0223","name":"Ahmed Tariq","time":"12:44","grade":"Moderate","confidence":"91%","flag":"🟠"},
-    {"pid":"PKR-1002","name":"Zara Malik","time":"12:01","grade":"No DR","confidence":"96%","flag":"🟢"},
-    {"pid":"PKR-0789","name":"Imran Baig","time":"11:30","grade":"Proliferative","confidence":"93%","flag":"🔴"},
-]
 APPOINTMENTS = [
     {"token":"T-001","name":"Bilal Khan","time":"09:00","dept":"Ophthalmology","type":"Follow-up","status":"Done"},
     {"token":"T-002","name":"Sana Raza","time":"09:30","dept":"Cardiology","type":"New","status":"In Consult"},
@@ -204,16 +195,23 @@ STAFF_DUTY   = [18,36,14,8,16]
 DEPT_COLORS  = ['#00e5ff','#a78bfa','#00ff9d','#ff3d6b','#ffb700','#3b82f6','#f97316']
 
 def make_ecg():
-    t = np.linspace(0,4*np.pi,400); ecg = np.zeros(400)
-    for i,x in enumerate(t):
-        n = (x%(2*np.pi))/(2*np.pi)
-        if 0.05<n<0.15:    ecg[i]=np.sin((n-.05)/.1*np.pi)*.2
-        elif .22<n<.24:    ecg[i]=(n-.22)/.02*.15
-        elif .24<=n<.265:  ecg[i]=-(n-.24)/.025*1.8
-        elif .265<=n<.29:  ecg[i]=-1.8+(n-.265)/.025*2.
-        elif .29<=n<.31:   ecg[i]=.2-(n-.29)/.02*.2
-        elif .38<n<.55:    ecg[i]=-np.sin((n-.38)/.17*np.pi)*.35
-    return t, ecg+np.random.normal(0,.015,400)
+    t = np.linspace(0, 4*np.pi, 400)
+    ecg = np.zeros(400)
+    for i, x in enumerate(t):
+        n = (x % (2*np.pi)) / (2*np.pi)
+        if 0.05 < n < 0.15:
+            ecg[i] = np.sin((n-.05)/.1*np.pi) * .2
+        elif .22 < n < .24:
+            ecg[i] = (n-.22)/.02 * .15
+        elif .24 <= n < .265:
+            ecg[i] = -(n-.24)/.025 * 1.8
+        elif .265 <= n < .29:
+            ecg[i] = -1.8 + (n-.265)/.025 * 2.
+        elif .29 <= n < .31:
+            ecg[i] = .2 - (n-.29)/.02 * .2
+        elif .38 < n < .55:
+            ecg[i] = -np.sin((n-.38)/.17*np.pi) * .35
+    return t, ecg + np.random.normal(0, .015, 400)
 
 PL   = dict(paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(11,20,37,0.6)',
             font=dict(family='DM Sans',color='#4a6fa5',size=11),
@@ -235,11 +233,11 @@ with st.sidebar:
                   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
                   font-weight:700;letter-spacing:2px;'>MedCore</div>
       <div style='font-size:0.6rem;color:#4a6fa5;letter-spacing:2px;
-                  text-transform:uppercase;margin-top:0.2rem;'>v2.0 · Hospital Intelligence</div>
+                  text-transform:uppercase;margin-top:0.2rem;'>Hospital Intelligence</div>
     </div><hr style='border-color:#112240;margin:0.8rem 0;'/>
     """, unsafe_allow_html=True)
 
-    view = ROLE_VIEW.get(user_role,"👨‍⚕️ Doctor View")
+    view = ROLE_VIEW.get(user_role, "👨‍⚕️ Doctor View")
 
     st.markdown(f"""
     <div style='background:#0b1425;border:1px solid #112240;border-radius:10px;
@@ -252,7 +250,7 @@ with st.sidebar:
 
     if st.button("🚪 Logout", use_container_width=True):
         for k in ["logged_in","username","user_role","user_name"]:
-            st.session_state[k] = "" if k!="logged_in" else False
+            st.session_state[k] = "" if k != "logged_in" else False
         st.rerun()
 
     st.markdown("<div class='section-header'>Live Stats</div>", unsafe_allow_html=True)
@@ -281,7 +279,7 @@ with st.sidebar:
     st.markdown("""
     <div style='font-size:0.6rem;color:#1a3058;font-family:"IBM Plex Mono",monospace;
                 text-align:center;padding:1rem 0 0.3rem;'>
-    MedCore v2.0 · SSUET BME · HOD Pitch Ready</div>
+    MedCore · SSUET BME · 2026</div>
     """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────
@@ -313,7 +311,7 @@ if "Doctor" in view:
         for p in PATIENTS:
             rc = {"High":"red","Medium":"amber","Low":"green"}[p["risk"]]
             sc = {"Critical":"badge-red","Waiting":"badge-amber",
-                  "In Consult":"badge-cyan"}[p["status"]]
+                  "In Consult":"badge-cyan"}.get(p["status"],"badge-cyan")
             st.markdown(f"""
             <div class='mc-card mc-card-top {rc}'>
               <div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;'>
@@ -347,8 +345,9 @@ if "Doctor" in view:
         fig_e.add_trace(go.Scatter(x=t,y=ecg,mode='lines',
             line=dict(color='#00ff9d',width=1.5),
             fill='tozeroy',fillcolor='rgba(0,255,157,0.04)'))
-        el=dict(PL); el['xaxis']=dict(showticklabels=False,gridcolor='#112240')
-        el['yaxis']=dict(showticklabels=False,gridcolor='#112240')
+        el = dict(PL)
+        el['xaxis'] = dict(showticklabels=False,gridcolor='#112240')
+        el['yaxis'] = dict(showticklabels=False,gridcolor='#112240')
         fig_e.update_layout(**el,height=155,showlegend=False,
             title=dict(text='Lead II · 72 BPM · NSR',font=dict(color='#4a6fa5',size=10)))
         st.plotly_chart(fig_e,use_container_width=True,config={'displayModeBar':False})
@@ -384,7 +383,7 @@ if "Doctor" in view:
 
         st.markdown("<div class='section-header' style='margin-top:0.8rem;'>Quick Actions</div>",
                     unsafe_allow_html=True)
-        c1,c2=st.columns(2)
+        c1,c2 = st.columns(2)
         with c1:
             st.button("📋 Prescription",use_container_width=True)
             st.button("🔬 Lab Order",use_container_width=True)
@@ -404,18 +403,18 @@ elif "Reception" in view:
            <div style='font-size:0.75rem;color:#4a6fa5;'>OPD Reception · Ground Floor</div>
       </div></div>""", unsafe_allow_html=True)
 
-    c1,c2,c3,c4=st.columns(4)
+    c1,c2,c3,c4 = st.columns(4)
     with c1: st.metric("🎫 Tokens","47","+5 today")
     with c2: st.metric("⏳ In Queue","12","3 critical")
     with c3: st.metric("✅ Completed","31","66%")
     with c4: st.metric("🚨 Emergency","4","↑ 2 new")
     st.markdown("---")
 
-    t1,t2,t3=st.tabs(["📋 Queue","➕ Register","📅 Schedule"])
+    t1,t2,t3 = st.tabs(["📋 Queue","➕ Register","📅 Schedule"])
     with t1:
         st.markdown("<div class='section-header'>Today's Appointment Queue</div>",unsafe_allow_html=True)
-        sc={"Done":"badge-green","In Consult":"badge-cyan","Waiting":"badge-amber",
-            "Critical":"badge-red","Scheduled":"badge-purple"}
+        sc = {"Done":"badge-green","In Consult":"badge-cyan","Waiting":"badge-amber",
+              "Critical":"badge-red","Scheduled":"badge-purple"}
         for apt in APPOINTMENTS:
             st.markdown(f"""
             <div class='mc-card' style='display:flex;align-items:center;gap:1rem;padding:0.85rem 1.2rem;'>
@@ -432,7 +431,7 @@ elif "Reception" in view:
 
     with t2:
         st.markdown("<div class='section-header'>New Patient Registration</div>",unsafe_allow_html=True)
-        c1,c2=st.columns(2)
+        c1,c2 = st.columns(2)
         with c1:
             st.text_input("Full Name",placeholder="Patient full name")
             st.text_input("CNIC",placeholder="42101-XXXXXXX-X")
@@ -444,26 +443,28 @@ elif "Reception" in view:
             st.selectbox("Visit Type",["New Patient","Follow-up","Emergency","Screening"])
             st.text_input("Referred By",placeholder="Doctor name (optional)")
         st.text_input("Chief Complaint",placeholder="Brief symptoms")
-        c1,c2,_=st.columns([1,1,2])
+        c1,c2,_ = st.columns([1,1,2])
         with c1: st.button("✅ Register & Issue Token",use_container_width=True)
         with c2: st.button("🖨 Print Token",use_container_width=True)
 
     with t3:
         st.markdown("<div class='section-header'>Weekly Slot Utilization</div>",unsafe_allow_html=True)
-        days7=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
-        fig_s=go.Figure()
+        days7 = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+        fig_s = go.Figure()
         fig_s.add_trace(go.Bar(name='Booked',x=days7,y=[18,22,19,26,24,10],
             marker_color='#00e5ff',marker_opacity=0.8))
         fig_s.add_trace(go.Bar(name='Available',x=days7,y=[12,8,11,4,6,20],
             marker_color='#1a3058'))
-        sl=dict(PL); sl['xaxis']=AXIS; sl['yaxis']=AXIS
+        sl = dict(PL)
+        sl['xaxis'] = AXIS
+        sl['yaxis'] = AXIS
         fig_s.update_layout(**sl,height=260,barmode='stack',
             legend=dict(font=dict(color='#4a6fa5',size=10),bgcolor='rgba(0,0,0,0)'),
             title=dict(text='Slot Utilization This Week',font=dict(color='#4a6fa5',size=11)))
         st.plotly_chart(fig_s,use_container_width=True,config={'displayModeBar':False})
 
 # ─────────────────────────────────────────
-# VIEW 3: MANAGEMENT — FULLY ENHANCED
+# VIEW 3: MANAGEMENT
 # ─────────────────────────────────────────
 elif "Management" in view:
     st.markdown("""
@@ -474,7 +475,7 @@ elif "Management" in view:
            <div style='font-size:0.75rem;color:#4a6fa5;'>Hospital Director · Full Analytics</div>
       </div></div>""", unsafe_allow_html=True)
 
-    c1,c2,c3,c4,c5,c6=st.columns(6)
+    c1,c2,c3,c4,c5,c6 = st.columns(6)
     with c1: st.metric("💰 Revenue Apr","1.45M PKR","+15%")
     with c2: st.metric("👥 Patients Apr","1,950","+12%")
     with c3: st.metric("🛏 Bed Occ.","74%","+6%")
@@ -483,83 +484,91 @@ elif "Management" in view:
     with c6: st.metric("⭐ Rating","4.6/5","+0.2")
     st.markdown("---")
 
-    t1,t2,t3,t4=st.tabs(["📈 Patient & Revenue","🏥 Departments","🦠 Disease Analytics","👥 Staff & Beds"])
+    t1,t2,t3,t4 = st.tabs(["📈 Patient & Revenue","🏥 Departments","🦠 Disease Analytics","👥 Staff & Beds"])
 
     with t1:
-        cl,cr=st.columns(2)
+        cl,cr = st.columns(2)
         with cl:
             st.markdown("<div class='section-header'>12-Month Patient Volume</div>",unsafe_allow_html=True)
-            z=np.polyfit(range(12),MONTHLY_PATIENTS,1); p=np.poly1d(z)
-            fig_pv=go.Figure()
+            z = np.polyfit(range(12),MONTHLY_PATIENTS,1)
+            p = np.poly1d(z)
+            fig_pv = go.Figure()
             fig_pv.add_trace(go.Scatter(x=MONTHS,y=MONTHLY_PATIENTS,mode='lines+markers',
                 name='Patients',line=dict(color='#00e5ff',width=2.5),marker=dict(size=7),
                 fill='tozeroy',fillcolor='rgba(0,229,255,0.07)'))
             fig_pv.add_trace(go.Scatter(x=MONTHS,y=[int(p(i)) for i in range(12)],
                 mode='lines',name='Trend',line=dict(color='#a78bfa',width=1.5,dash='dot')))
-            pvl=dict(PL); pvl['xaxis']=AXIS; pvl['yaxis']=dict(**AXIS,title='Patients')
+            pvl = dict(PL)
+            pvl['xaxis'] = AXIS
+            pvl['yaxis'] = dict(**AXIS,title='Patients')
             fig_pv.update_layout(**pvl,height=230,
                 legend=dict(font=dict(color='#4a6fa5',size=9),bgcolor='rgba(0,0,0,0)',orientation='h',y=1.12),
-                title=dict(text='Monthly Patient Visits 2025/26',font=dict(color='#4a6fa5',size=11)))
+                title=dict(text='Monthly Patient Visits',font=dict(color='#4a6fa5',size=11)))
             st.plotly_chart(fig_pv,use_container_width=True,config={'displayModeBar':False})
 
         with cr:
             st.markdown("<div class='section-header'>Revenue vs Cost vs Profit</div>",unsafe_allow_html=True)
-            profit=[r-c for r,c in zip(MONTHLY_REVENUE,MONTHLY_COST)]
-            fig_rv=go.Figure()
+            profit = [r-c for r,c in zip(MONTHLY_REVENUE,MONTHLY_COST)]
+            fig_rv = go.Figure()
             fig_rv.add_trace(go.Bar(x=MONTHS,y=MONTHLY_REVENUE,name='Revenue',
                 marker_color='rgba(0,255,157,0.75)',width=0.3))
             fig_rv.add_trace(go.Bar(x=MONTHS,y=MONTHLY_COST,name='Cost',
                 marker_color='rgba(255,61,107,0.6)',width=0.3))
             fig_rv.add_trace(go.Scatter(x=MONTHS,y=profit,name='Profit',
                 mode='lines+markers',line=dict(color='#ffb700',width=2,dash='dot'),marker=dict(size=6)))
-            rvl=dict(PL); rvl['xaxis']=AXIS; rvl['yaxis']=dict(**AXIS,ticksuffix='K PKR')
+            rvl = dict(PL)
+            rvl['xaxis'] = AXIS
+            rvl['yaxis'] = dict(**AXIS,ticksuffix='K PKR')
             fig_rv.update_layout(**rvl,height=230,barmode='group',
                 legend=dict(font=dict(color='#4a6fa5',size=9),bgcolor='rgba(0,0,0,0)',orientation='h',y=1.12),
-                title=dict(text='Financial Performance 2025/26',font=dict(color='#4a6fa5',size=11)))
+                title=dict(text='Financial Performance',font=dict(color='#4a6fa5',size=11)))
             st.plotly_chart(fig_rv,use_container_width=True,config={'displayModeBar':False})
 
         st.markdown("<div class='section-header'>Monthly Surgical Procedures</div>",unsafe_allow_html=True)
-        fig_sg=go.Figure()
+        fig_sg = go.Figure()
         fig_sg.add_trace(go.Bar(x=MONTHS,y=MONTHLY_SURGERIES,
             marker=dict(color=MONTHLY_SURGERIES,
                         colorscale=[[0,'#1a3058'],[0.5,'#00e5ff'],[1,'#00ff9d']],showscale=False),
             text=MONTHLY_SURGERIES,textposition='outside',
             textfont=dict(family='IBM Plex Mono',size=9,color='#4a6fa5')))
-        sgl=dict(PL); sgl['xaxis']=AXIS; sgl['yaxis']=dict(**AXIS,title='Procedures')
+        sgl = dict(PL)
+        sgl['xaxis'] = AXIS
+        sgl['yaxis'] = dict(**AXIS,title='Procedures')
         fig_sg.update_layout(**sgl,height=185,showlegend=False,
             title=dict(text='Surgical Volume Trend',font=dict(color='#4a6fa5',size=11)))
         st.plotly_chart(fig_sg,use_container_width=True,config={'displayModeBar':False})
 
     with t2:
-        cl,cr=st.columns([1.2,1])
+        cl,cr = st.columns([1.2,1])
         with cl:
             st.markdown("<div class='section-header'>Patients by Department</div>",unsafe_allow_html=True)
-            fig_dp=go.Figure()
+            fig_dp = go.Figure()
             fig_dp.add_trace(go.Bar(x=DEPT_NAMES,y=DEPT_PTS,marker_color=DEPT_COLORS,
                 marker_opacity=0.85,text=DEPT_PTS,textposition='outside',
                 textfont=dict(family='IBM Plex Mono',size=9,color='#4a6fa5')))
-            dpl=dict(PL); dpl['xaxis']=dict(**AXIS,tickangle=-20); dpl['yaxis']=dict(**AXIS,title='Patients')
+            dpl = dict(PL)
+            dpl['xaxis'] = dict(**AXIS,tickangle=-20)
+            dpl['yaxis'] = dict(**AXIS,title='Patients')
             fig_dp.update_layout(**dpl,height=240,showlegend=False,
-                title=dict(text='Department Patient Load — April 2026',font=dict(color='#4a6fa5',size=11)))
+                title=dict(text='Department Patient Load',font=dict(color='#4a6fa5',size=11)))
             st.plotly_chart(fig_dp,use_container_width=True,config={'displayModeBar':False})
 
             st.markdown("<div class='section-header'>Revenue by Department</div>",unsafe_allow_html=True)
-            fig_dr2=go.Figure(go.Bar(x=DEPT_REV,y=DEPT_NAMES,orientation='h',
+            fig_dr2 = go.Figure(go.Bar(x=DEPT_REV,y=DEPT_NAMES,orientation='h',
                 marker=dict(color=DEPT_COLORS,opacity=0.8),
                 text=[f"{v}K" for v in DEPT_REV],textposition='outside',
                 textfont=dict(family='IBM Plex Mono',size=9,color='#4a6fa5')))
-            # FIX: set margin inside dict to avoid duplicate keyword error
-            drl=dict(PL)
-            drl['margin']=dict(l=10,r=40,t=30,b=10)
-            drl['xaxis']=dict(**AXIS,ticksuffix='K')
-            drl['yaxis']=AXIS
+            drl = dict(PL)
+            drl['margin'] = dict(l=10,r=40,t=30,b=10)
+            drl['xaxis'] = dict(**AXIS,ticksuffix='K')
+            drl['yaxis'] = AXIS
             fig_dr2.update_layout(**drl,height=230,showlegend=False,
                 title=dict(text='Revenue Contribution (000 PKR)',font=dict(color='#4a6fa5',size=11)))
             st.plotly_chart(fig_dr2,use_container_width=True,config={'displayModeBar':False})
 
         with cr:
             st.markdown("<div class='section-header'>Patient Share</div>",unsafe_allow_html=True)
-            fig_pie=go.Figure(go.Pie(labels=DEPT_NAMES,values=DEPT_PTS,hole=0.55,
+            fig_pie = go.Figure(go.Pie(labels=DEPT_NAMES,values=DEPT_PTS,hole=0.55,
                 marker=dict(colors=DEPT_COLORS),textfont=dict(family='IBM Plex Mono',size=9)))
             fig_pie.update_layout(paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',
                 showlegend=True,height=220,margin=dict(l=0,r=0,t=10,b=10),
@@ -568,8 +577,8 @@ elif "Management" in view:
 
             st.markdown("<div class='section-header'>Patient Satisfaction</div>",unsafe_allow_html=True)
             for dept,score in zip(DEPT_NAMES,DEPT_SAT):
-                pct=(score/5)*100
-                sc='#00ff9d' if score>=4.5 else '#ffb700' if score>=4.0 else '#ff3d6b'
+                pct = (score/5)*100
+                sc = '#00ff9d' if score>=4.5 else '#ffb700' if score>=4.0 else '#ff3d6b'
                 st.markdown(f"""
                 <div style='display:flex;align-items:center;gap:0.6rem;padding:0.35rem 0;border-bottom:1px solid #112240;'>
                   <div style='font-size:0.7rem;color:#4a6fa5;min-width:95px;'>{dept[:11]}</div>
@@ -596,21 +605,21 @@ elif "Management" in view:
                 </div>""", unsafe_allow_html=True)
 
     with t3:
-        cl,cr=st.columns([1.3,1])
+        cl,cr = st.columns([1.3,1])
         with cl:
-            st.markdown("<div class='section-header'>Top 10 Diseases — April 2026</div>",unsafe_allow_html=True)
-            sidx=np.argsort(DISEASE_CASES)[::-1]
-            sdis=[DISEASE_CASES[i] for i in sidx]; sdnames=[DISEASES[i] for i in sidx]
-            bcolors=['#ff3d6b' if c>200 else '#ffb700' if c>100 else '#00e5ff' for c in sdis]
-            fig_dis=go.Figure(go.Bar(x=sdis,y=sdnames,orientation='h',
+            st.markdown("<div class='section-header'>Top 10 Diseases</div>",unsafe_allow_html=True)
+            sidx = np.argsort(DISEASE_CASES)[::-1]
+            sdis = [DISEASE_CASES[i] for i in sidx]
+            sdnames = [DISEASES[i] for i in sidx]
+            bcolors = ['#ff3d6b' if c>200 else '#ffb700' if c>100 else '#00e5ff' for c in sdis]
+            fig_dis = go.Figure(go.Bar(x=sdis,y=sdnames,orientation='h',
                 marker_color=bcolors,marker_opacity=0.85,
                 text=sdis,textposition='outside',
                 textfont=dict(family='IBM Plex Mono',size=9,color='#4a6fa5')))
-            # FIX: set margin inside dict
-            disl=dict(PL)
-            disl['margin']=dict(l=10,r=40,t=30,b=10)
-            disl['xaxis']=dict(**AXIS,title='Cases')
-            disl['yaxis']=AXIS
+            disl = dict(PL)
+            disl['margin'] = dict(l=10,r=40,t=30,b=10)
+            disl['xaxis'] = dict(**AXIS,title='Cases')
+            disl['yaxis'] = AXIS
             fig_dis.update_layout(**disl,height=320,showlegend=False,
                 title=dict(text='Case Frequency by Disease',font=dict(color='#4a6fa5',size=11)))
             st.plotly_chart(fig_dis,use_container_width=True,config={'displayModeBar':False})
@@ -618,8 +627,8 @@ elif "Management" in view:
         with cr:
             st.markdown("<div class='section-header'>Month-on-Month Trend</div>",unsafe_allow_html=True)
             for dis,trnd in zip(DISEASES,DISEASE_TREND):
-                color='#00ff9d' if trnd<0 else '#ff3d6b' if trnd>8 else '#ffb700'
-                arrow="↓" if trnd<0 else "↑"
+                color = '#00ff9d' if trnd<0 else '#ff3d6b' if trnd>8 else '#ffb700'
+                arrow = "↓" if trnd<0 else "↑"
                 st.markdown(f"""
                 <div style='display:flex;justify-content:space-between;align-items:center;
                             padding:0.42rem 0;border-bottom:1px solid #112240;'>
@@ -627,41 +636,36 @@ elif "Management" in view:
                   <div style='font-family:"IBM Plex Mono",monospace;font-size:0.8rem;
                               font-weight:700;color:{color};'>{arrow} {abs(trnd)}%</div>
                 </div>""", unsafe_allow_html=True)
-            st.markdown("""
-            <div style='margin-top:1rem;background:rgba(255,61,107,0.06);border:1px solid rgba(255,61,107,0.2);
-                        border-radius:8px;padding:0.8rem;font-size:0.7rem;color:#ff3d6b;
-                        font-family:"IBM Plex Mono",monospace;line-height:1.8;'>
-            ⚠️ HIGH PRIORITY<br>Diabetic Retinopathy +12%<br>
-            Diabetes Type 2 +7%<br>Glaucoma +8%<br>
-            → Scale AI Screening immediately
-            </div>""", unsafe_allow_html=True)
 
-        st.markdown("<div class='section-header' style='margin-top:0.5rem;'>DR Cases — 12 Month Trend</div>",
+        st.markdown("<div class='section-header' style='margin-top:0.5rem;'>Disease Trend — 12 Months</div>",
                     unsafe_allow_html=True)
-        dr_m=[18,22,19,28,32,29,25,35,41,48,52,58]
-        fig_drt=go.Figure()
+        dr_m = [18,22,19,28,32,29,25,35,41,48,52,58]
+        fig_drt = go.Figure()
         fig_drt.add_trace(go.Scatter(x=MONTHS,y=dr_m,mode='lines+markers',
             line=dict(color='#ff3d6b',width=2.5),marker=dict(size=8,color='#ff3d6b'),
-            fill='tozeroy',fillcolor='rgba(255,61,107,0.07)',name='DR Cases'))
-        drtl=dict(PL); drtl['xaxis']=AXIS; drtl['yaxis']=dict(**AXIS,title='Cases')
+            fill='tozeroy',fillcolor='rgba(255,61,107,0.07)',name='Cases'))
+        drtl = dict(PL)
+        drtl['xaxis'] = AXIS
+        drtl['yaxis'] = dict(**AXIS,title='Cases')
         fig_drt.update_layout(**drtl,height=185,showlegend=False,
-            title=dict(text='DR Cases Rising — Screening Scale-Up Needed',
-                       font=dict(color='#ff3d6b',size=11)))
+            title=dict(text='Rising Trend — Scale-Up Needed',font=dict(color='#ff3d6b',size=11)))
         st.plotly_chart(fig_drt,use_container_width=True,config={'displayModeBar':False})
 
     with t4:
-        cl,cr=st.columns(2)
+        cl,cr = st.columns(2)
         with cl:
             st.markdown("<div class='section-header'>Bed Occupancy by Ward</div>",unsafe_allow_html=True)
-            occ_pct=[o/t*100 for o,t in zip(BED_OCC,BED_TOTAL)]
-            fig_bed=go.Figure()
+            occ_pct = [o/t*100 for o,t in zip(BED_OCC,BED_TOTAL)]
+            fig_bed = go.Figure()
             fig_bed.add_trace(go.Bar(name='Occupied',x=BED_WARDS,y=BED_OCC,
                 marker_color=['#ff3d6b' if p>85 else '#ffb700' if p>70 else '#00ff9d' for p in occ_pct],
                 marker_opacity=0.85,text=[f"{int(p)}%" for p in occ_pct],textposition='outside',
                 textfont=dict(family='IBM Plex Mono',size=9,color='#4a6fa5')))
             fig_bed.add_trace(go.Bar(name='Available',x=BED_WARDS,
                 y=[t-o for t,o in zip(BED_TOTAL,BED_OCC)],marker_color='#1a3058'))
-            bl=dict(PL); bl['xaxis']=AXIS; bl['yaxis']=dict(**AXIS,title='Beds')
+            bl = dict(PL)
+            bl['xaxis'] = AXIS
+            bl['yaxis'] = dict(**AXIS,title='Beds')
             fig_bed.update_layout(**bl,height=250,barmode='stack',
                 legend=dict(font=dict(color='#4a6fa5',size=9),bgcolor='rgba(0,0,0,0)'),
                 title=dict(text='Bed Occupancy — ICU at 90%',font=dict(color='#4a6fa5',size=11)))
@@ -669,26 +673,28 @@ elif "Management" in view:
 
         with cr:
             st.markdown("<div class='section-header'>Staff Distribution</div>",unsafe_allow_html=True)
-            fig_st=go.Figure()
+            fig_st = go.Figure()
             fig_st.add_trace(go.Bar(name='On Duty',x=STAFF_ROLES,y=STAFF_DUTY,
                 marker_color='#00e5ff',marker_opacity=0.8))
             fig_st.add_trace(go.Bar(name='Off Duty',x=STAFF_ROLES,
                 y=[t-o for t,o in zip(STAFF_TOTAL,STAFF_DUTY)],marker_color='#1a3058'))
-            stl=dict(PL); stl['xaxis']=AXIS; stl['yaxis']=dict(**AXIS,title='Count')
+            stl = dict(PL)
+            stl['xaxis'] = AXIS
+            stl['yaxis'] = dict(**AXIS,title='Count')
             fig_st.update_layout(**stl,height=250,barmode='stack',
                 legend=dict(font=dict(color='#4a6fa5',size=9),bgcolor='rgba(0,0,0,0)'),
                 title=dict(text='Staff On Duty Today',font=dict(color='#4a6fa5',size=11)))
             st.plotly_chart(fig_st,use_container_width=True,config={'displayModeBar':False})
 
         st.markdown("---")
-        k1,k2,k3,k4=st.columns(4)
+        k1,k2,k3,k4 = st.columns(4)
         with k1: st.metric("🛏 Total Beds","115","12 available")
         with k2: st.metric("🚨 ICU","9/10","90% full")
         with k3: st.metric("👨‍⚕️ Doctors","18/24","on duty")
         with k4: st.metric("💉 Nurses","36/48","on duty")
 
         st.markdown("<div class='section-header' style='margin-top:0.8rem;'>Actions</div>",unsafe_allow_html=True)
-        c1,c2,c3=st.columns(3)
+        c1,c2,c3 = st.columns(3)
         with c1: st.button("📊 Export Report",use_container_width=True)
         with c2: st.button("📧 Send to Board",use_container_width=True)
         with c3: st.button("🖨 Print Summary",use_container_width=True)
